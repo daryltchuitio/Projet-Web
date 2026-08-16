@@ -11,6 +11,19 @@ body {
     line-height: 1.6;
 }
 
+/* Texte réservé aux lecteurs d’écran (accessibilité) */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Lien d’évitement (accessibilité) */
 .skip-link {
     position: absolute;
