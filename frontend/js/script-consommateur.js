@@ -65,14 +65,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function apiCheckProductAvailable(productId) {
-    const res = await fetch(`${API_BASE}/api/products`);
-    const products = await res.json().catch(() => []);
+    const res = await fetch(`${API_BASE}/api/products/${productId}`);
 
-    if (!res.ok || !Array.isArray(products)) {
+    if (res.status === 404) return false;
+    if (!res.ok) {
       throw new Error("Impossible de vérifier la disponibilité du produit.");
     }
 
-    return products.some(p => String(p._id) === String(productId));
+    return true;
   }
 
   function formatOrderStatus(status) {

@@ -547,6 +547,18 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
+// Route GET /api/products/:id (public) — un seul produit, actif ou archivé
+app.get("/api/products/:id", async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).populate("producer", "name");
+    if (!product) return res.status(404).json({ message: "Produit introuvable" });
+
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "Erreur serveur", error: err.message });
+  }
+});
+
 
 // Créer une commande (Consumer uniquement)
 app.post("/api/orders", auth, async (req, res) => {
