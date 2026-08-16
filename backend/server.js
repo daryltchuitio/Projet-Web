@@ -10,7 +10,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
-const nodemon = require("nodemon");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 
 const path = require("path");
 require("dotenv").config();
@@ -18,6 +19,16 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const MONGODB_URI = process.env.MONGODB_URI;
+
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "https://www.googletagmanager.com"],
+      imgSrc: ["'self'", "data:"],
+    }
+  }
+}));
 
 app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true, limit: "5mb" }));
@@ -83,19 +94,46 @@ function filterOrderItemsForProducer(order, producerId) {
   return cloned;
 }
 
+// Champs qu'un producteur est autorisé à définir/modifier sur un produit
+const ALLOWED_PRODUCT_FIELDS = ["name", "description", "price", "category", "origin", "region", "dlc", "image"];
+
+function pickAllowedFields(source, allowed) {
+  return Object.fromEntries(
+    Object.entries(source || {}).filter(([key]) => allowed.includes(key))
+  );
+}
+
 app.use(cors({
-  origin: ["https://greencart-tsds.netlify.app",
-    "http://localhost:4000",
-    "http://127.0.0.1:4000"
+  // TODO: ajouter l'URL du frontend une fois déployé
+  origin: [
+    "http://localhost:4040",
+    "http://127.0.0.1:4040"
   ],
   methods: ["GET", "POST", "PATCH", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
+// Rate-limiting sur les routes sensibles (brute-force, spam d'emails)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Trop de tentatives, réessayez plus tard." }
+});
+
+const forgotPasswordLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: "Trop de demandes de réinitialisation, réessayez plus tard." }
+});
+
 // Config Email reset password
 const MAIL_USER = process.env.MAIL_USER;
 const MAIL_PASS = process.env.MAIL_PASS;
-const APP_BASE_URL = process.env.APP_BASE_URL || "http://localhost:4000";
+const APP_BASE_URL = process.env.APP_BASE_URL || "http://localhost:4040";
 
 const mailTransporter = nodemailer.createTransport({
   service: "gmail",
@@ -114,7 +152,7 @@ app.get("/api/health", (req, res) => {
 });
 
 //  REGISTER sécurisé (hash password)
-app.post("/api/register", async (req, res) => {
+app.post("/api/register", authLimiter, async (req, res) => {
   try {
     const { name, email, password, role } = req.body;
 
@@ -149,7 +187,7 @@ app.post("/api/register", async (req, res) => {
 });
 
 // LOGIN avec JWT
-app.post("/api/login", async (req, res) => {
+app.post("/api/login", authLimiter, async (req, res) => {
   console.log("➡️ /api/login appelé");
   try {
     const { email, password } = req.body;
@@ -208,7 +246,7 @@ app.get("/api/me", auth, async (req, res) => {
 });
 
 // Demande de réinitialisation du mot de passe
-app.post("/api/password/forgot", async (req, res) => {
+app.post("/api/password/forgot", forgotPasswordLimiter, async (req, res) => {
   try {
     const email = String(req.body.email || "").trim().toLowerCase();
 
@@ -372,7 +410,7 @@ app.post("/api/products", auth, async (req, res) => {
     }
 
     const product = await Product.create({
-      ...req.body,
+      ...pickAllowedFields(req.body, ALLOWED_PRODUCT_FIELDS),
       producer: req.user.userId
     });
 
@@ -459,7 +497,7 @@ app.patch("/api/products/:id", auth, async (req, res) => {
       return res.status(403).json({ message: "Vous ne pouvez modifier que vos produits" });
     }
 
-    Object.assign(product, req.body);
+    Object.assign(product, pickAllowedFields(req.body, ALLOWED_PRODUCT_FIELDS));
     await product.save();
 
     res.json(product);
@@ -509,11 +547,6 @@ app.get("/api/products", async (req, res) => {
   }
 });
 
-
-//  Route debug pour vérifier le contenu du token
-app.get("/api/debug-token", auth, (req, res) => {
-  res.json(req.user);
-});
 
 // Créer une commande (Consumer uniquement)
 app.post("/api/orders", auth, async (req, res) => {
@@ -753,10 +786,7 @@ app.post("/api/products/:id/reviews", auth, async (req, res) => {
       return res.status(400).json({ message: "orderId est requis." });
     }
 
-    const product = await Product.findOne({
-      _id: productId,
-      isActive: true
-    });
+    const product = await Product.findOne({ _id: productId });
 
     if (!product) {
       return res.status(409).json({

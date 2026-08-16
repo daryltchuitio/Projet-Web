@@ -20,4 +20,7 @@ const productSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+productSchema.index({ producer: 1, isActive: 1 });
+productSchema.index({ isActive: 1 });
+
 module.exports = mongoose.model("Product", productSchema);

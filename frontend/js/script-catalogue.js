@@ -10,12 +10,21 @@ async function apiGetProductReviews(productId) {
   if (!res.ok) throw new Error("Erreur API /reviews");
   return await res.json();
 }
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const filterCategory = document.getElementById('filter-category');
   const filterSearch = document.getElementById('filter-search');
   const listEl = document.getElementById("catalogue-list");
-  const PRODUCER_PRODUCTS_KEY = "greencart_products";
   const REVIEWS_KEY = "greencart_reviews";
   const modal = document.getElementById("reviews-modal");
   const modalContent = document.getElementById("reviews-modal-content");
@@ -53,10 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
           card.innerHTML = `
           <p class="review-header">
-            <strong>${author}</strong> – <span class="review-date">${dateStr}</span>
+            <strong>${escapeHtml(author)}</strong> – <span class="review-date">${dateStr}</span>
           </p>
           <p class="review-stars">${stars} <span class="review-score">(${rating.toFixed(1)}/5)</span></p>
-          ${r.comment ? `<p class="review-comment">${r.comment}</p>` : ""}
+          ${r.comment ? `<p class="review-comment">${escapeHtml(r.comment)}</p>` : ""}
         `;
           modalContent.appendChild(card);
         });
@@ -103,6 +112,52 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  function buildProductCard(p) {
+    const article = document.createElement("article");
+    article.className = "product-card";
+
+    article.dataset.id = p._id;
+    article.dataset.name = p.name;
+    article.dataset.price = p.price;
+    article.dataset.category = (p.category || "").toLowerCase();
+    article.dataset.origin = p.origin || "";
+    article.dataset.producer = p.producer?.name || "Producteur local GreenCart";
+    article.dataset.description = p.description || "";
+    article.dataset.image = p.image || "/images/image-par-defaut.png";
+    article.dataset.region = p.region || "";
+    article.dataset.dlc = p.dlc || "";
+
+    const avg = Number(p.avgRating || 0);
+    const count = Number(p.reviewsCount || 0);
+    const rounded = Math.round(avg);
+    const stars = "★".repeat(rounded) + "☆".repeat(5 - rounded);
+
+    article.innerHTML = `
+      <img src="${escapeHtml(article.dataset.image)}" alt="${escapeHtml(p.name)}" class="product-img">
+      <h2>${escapeHtml(p.name)}</h2>
+      <p class="product-info">${escapeHtml(article.dataset.description)}</p>
+      <ul class="product-details">
+        <li><strong>Origine :</strong> ${escapeHtml(article.dataset.origin)}</li>
+        <li><strong>Producteur :</strong> ${escapeHtml(article.dataset.producer)}</li>
+        ${article.dataset.region ? `<li><strong>Région :</strong> ${escapeHtml(article.dataset.region)}</li>` : ""}
+        ${article.dataset.dlc ? `<li><strong>DLC :</strong> ${escapeHtml(article.dataset.dlc)}</li>` : ""}
+        <li><strong>Catégorie :</strong> ${escapeHtml(article.dataset.category)}</li>
+      </ul>
+      <p class="product-price">${Number(article.dataset.price).toFixed(2)} €</p>
+
+      <p class="product-rating">
+        <span class="rating-stars">${stars}</span>
+        <button type="button" class="rating-link" data-product-id="${escapeHtml(p._id)}">
+          ${avg.toFixed(1)}/5 – ${count} avis
+        </button>
+      </p>
+
+      <button class="btn-primary add-to-cart">Ajouter au panier</button>
+    `;
+
+    return article;
+  }
+
   async function loadApiProducts() {
     if (!listEl) return;
 
@@ -110,99 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const products = await apiGetProducts();
       if (!Array.isArray(products)) return;
 
-      products.forEach(p => {
-        const article = document.createElement("article");
-        article.className = "product-card";
-
-        article.dataset.id = p._id;
-        article.dataset.name = p.name;
-        article.dataset.price = p.price;
-        article.dataset.category = (p.category || "").toLowerCase();
-        article.dataset.origin = p.origin || "";
-        article.dataset.producer = p.producer?.name || "Producteur local GreenCart";
-        article.dataset.description = p.description || "";
-        article.dataset.image = p.image || "/images/image-par-defaut.png";
-        article.dataset.region = p.region || "";
-        article.dataset.dlc = p.dlc || "";
-
-        const avg = Number(p.avgRating || 0);
-        const count = Number(p.reviewsCount || 0);
-        const rounded = Math.round(avg);
-        const stars = "★".repeat(rounded) + "☆".repeat(5 - rounded);
-
-        article.innerHTML = `
-        <img src="${article.dataset.image}" alt="${p.name}" class="product-img">
-        <h2>${p.name}</h2>
-        <p class="product-info">${article.dataset.description}</p>
-        <ul class="product-details">
-          <li><strong>Origine :</strong> ${article.dataset.origin}</li>
-          <li><strong>Producteur :</strong> ${article.dataset.producer}</li>
-          ${article.dataset.region ? `<li><strong>Région :</strong> ${article.dataset.region}</li>` : ""}
-          ${article.dataset.dlc ? `<li><strong>DLC :</strong> ${article.dataset.dlc}</li>` : ""}
-          <li><strong>Catégorie :</strong> ${article.dataset.category}</li>
-        </ul>
-        <p class="product-price">${Number(article.dataset.price).toFixed(2)} €</p>
-
-        <p class="product-rating">
-          <span class="rating-stars">${stars}</span>
-          <button type="button" class="rating-link" data-product-id="${p._id}">
-            ${avg.toFixed(1)}/5 – ${count} avis
-          </button>
-        </p>
-
-        <button class="btn-primary add-to-cart">Ajouter au panier</button>
-      `;
-
-        listEl.appendChild(article);
-      });
-
+      products.forEach(p => listEl.appendChild(buildProductCard(p)));
     } catch (err) {
       console.error("Erreur loadApiProducts:", err);
     }
-  }
-
-  function loadProducerProducts() {
-    const raw = localStorage.getItem(PRODUCER_PRODUCTS_KEY);
-    if (!raw || !listEl) return;
-
-    let products;
-    try {
-      products = JSON.parse(raw);
-    } catch {
-      return;
-    }
-    if (!Array.isArray(products)) return;
-
-    products.forEach(p => {
-      const article = document.createElement("article");
-      article.className = "product-card";
-      article.dataset.id = p.id;
-      article.dataset.name = p.name;
-      article.dataset.price = p.price;
-      article.dataset.category = p.category;
-      article.dataset.origin = p.origin;
-      article.dataset.producer = p.producerName || "Producteur local GreenCart";
-      article.dataset.description = p.description;
-      article.dataset.image = p.image || "/images/image-par-defaut.png";
-      article.dataset.region = p.region || "";
-      article.dataset.dlc = p.dlc || "";
-
-      article.innerHTML = `
-        <img src="${article.dataset.image}" alt="${p.name}" class="product-img">
-        <h2>${p.name}</h2>
-        <p class="product-info">${p.description}</p>
-        <ul class="product-details">
-          <li><strong>Origine :</strong> ${p.origin}</li>
-          <li><strong>Producteur :</strong> ${article.dataset.producer}</li>
-          ${p.region ? `<li><strong>Région :</strong> ${p.region}</li>` : ""}
-          ${p.dlc ? `<li><strong>DLC :</strong> ${p.dlc}</li>` : ""}
-          <li><strong>Catégorie :</strong> ${p.category}</li>
-        </ul>
-        <p class="product-price">${p.price.toFixed(2)} €</p>
-        <button class="btn-primary add-to-cart">Ajouter au panier</button>
-      `;
-      listEl.appendChild(article);
-    });
   }
 
   loadApiProducts();
@@ -212,53 +178,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!Array.isArray(products) || !listEl) return;
 
     listEl.innerHTML = "";
-
-    products.forEach(p => {
-      const article = document.createElement("article");
-      article.className = "product-card";
-
-      article.dataset.id = p._id;
-      article.dataset.name = p.name;
-      article.dataset.price = p.price;
-      article.dataset.category = (p.category || "").toLowerCase();
-      article.dataset.origin = p.origin || "";
-      article.dataset.producer = p.producer?.name || "Producteur local GreenCart";
-      article.dataset.description = p.description || "";
-      article.dataset.image = p.image || "/images/image-par-defaut.png";
-      article.dataset.region = p.region || "";
-      article.dataset.dlc = p.dlc || "";
-
-      const avg = Number(p.avgRating || 0);
-      const count = Number(p.reviewsCount || 0);
-      const rounded = Math.round(avg);
-      const stars = "★".repeat(rounded) + "☆".repeat(5 - rounded);
-
-      article.innerHTML = `
-      <img src="${article.dataset.image}" alt="${p.name}" class="product-img">
-      <h2>${p.name}</h2>
-      <p class="product-info">${article.dataset.description}</p>
-      <ul class="product-details">
-        <li><strong>Origine :</strong> ${article.dataset.origin}</li>
-        <li><strong>Producteur :</strong> ${article.dataset.producer}</li>
-        ${article.dataset.region ? `<li><strong>Région :</strong> ${article.dataset.region}</li>` : ""}
-        ${article.dataset.dlc ? `<li><strong>DLC :</strong> ${article.dataset.dlc}</li>` : ""}
-        <li><strong>Catégorie :</strong> ${article.dataset.category}</li>
-      </ul>
-      <p class="product-price">${Number(article.dataset.price).toFixed(2)} €</p>
-
-      <p class="product-rating">
-        <span class="rating-stars">${stars}</span>
-        <button type="button" class="rating-link" data-product-id="${p._id}">
-          ${avg.toFixed(1)}/5 – ${count} avis
-        </button>
-      </p>
-
-      <button class="btn-primary add-to-cart">Ajouter au panier</button>
-    `;
-
-      listEl.appendChild(article);
-    });
-
+    products.forEach(p => listEl.appendChild(buildProductCard(p)));
     applyFilters();
   });
 

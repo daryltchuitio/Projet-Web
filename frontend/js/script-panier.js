@@ -28,6 +28,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const CART_KEY_LOCAL = "greencart_cart";
   const API_BASE = window.APP_CONFIG.API_BASE;
 
+  function escapeHtml(value) {
+    return String(value ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
   function getCart() {
     return JSON.parse(localStorage.getItem(CART_KEY_LOCAL) || "[]");
   }
@@ -92,12 +101,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       article.innerHTML = `
         <div class="cart-item-left">
-          <img src="${item.image}" alt="${item.name}" class="cart-img">
+          <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}" class="cart-img">
           <div>
-            <h2>${item.name}</h2>
-            <p class="product-info">${item.description || ""}</p>
-            <p class="cart-meta"><strong>Origine :</strong> ${item.origin || "—"}</p>
-            <p class="cart-meta"><strong>Producteur :</strong> ${item.producer || "—"}</p>
+            <h2>${escapeHtml(item.name)}</h2>
+            <p class="product-info">${escapeHtml(item.description || "")}</p>
+            <p class="cart-meta"><strong>Origine :</strong> ${escapeHtml(item.origin || "—")}</p>
+            <p class="cart-meta"><strong>Producteur :</strong> ${escapeHtml(item.producer || "—")}</p>
           </div>
         </div>
         <div class="cart-item-right">
@@ -177,6 +186,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
+      const originalBtnText = validateBtn.textContent;
+      validateBtn.disabled = true;
+      validateBtn.textContent = "Traitement en cours...";
+
+      try {
       try {
         const unavailableItems = await checkCartAvailability(cart);
 
@@ -264,6 +278,10 @@ document.addEventListener("DOMContentLoaded", () => {
           title: "Erreur de réseau",
           confirmText: "Réessayer"
         });
+      }
+      } finally {
+        validateBtn.disabled = false;
+        validateBtn.textContent = originalBtnText;
       }
     });
   }
