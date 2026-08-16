@@ -75,24 +75,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return true;
   }
 
-  function formatOrderStatus(status) {
-    switch (status) {
-      case "commande_en_cours":
-        return "Commande en cours";
-      case "commande_terminee":
-        return "Commande terminée";
-      case "commande_validee":
-        return "Commandée";
-      case "en_preparation":
-        return "En préparation";
-      case "prete":
-        return "Prête à retirer";
-      case "terminee":
-        return "Terminée";
-      default:
-        return status || "Inconnu";
-    }
-  }
+  const formatOrderStatus = window.GreenCartUtils.getStatusLabel;
 
   function formatDateTime(value) {
     const date = new Date(value);

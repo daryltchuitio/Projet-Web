@@ -28,24 +28,7 @@
     });
   }
 
-  function formatStatus(status) {
-    switch (status) {
-      case "commande_en_cours":
-        return "Commande en cours";
-      case "commande_terminee":
-        return "Commande terminée";
-      case "commande_validee":
-        return "Commandée";
-      case "en_preparation":
-        return "En préparation";
-      case "prete":
-        return "Prête à retirer";
-      case "terminee":
-        return "Terminée";
-      default:
-        return status || "Inconnu";
-    }
-  }
+  const formatStatus = window.GreenCartUtils.getStatusLabel;
 
   function makeStars(rating) {
     const safe = Math.max(0, Math.min(5, Math.round(Number(rating) || 0)));

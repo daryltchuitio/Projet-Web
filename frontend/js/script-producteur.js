@@ -514,18 +514,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  function getStatusLabel(status) {
-    const labels = {
-      "commande_en_cours": "Commande en cours",
-      "commande_terminee": "Commande terminée",
-      "commande_validee": "Commandée",
-      "en_preparation": "En préparation",
-      "prete": "Prête à retirer",
-      "terminee": "Terminée"
-    };
-    return labels[status] || status;
-  }
-
+  const getStatusLabel = window.GreenCartUtils.getStatusLabel;
 
   async function renderProducerOrders() {
     const activeContainer = document.getElementById("producer-orders-active");
