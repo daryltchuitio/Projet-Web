@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+
+# Pages sensibles ou inutiles pour le SEO
+Disallow: /dashboard-consommateur.html
+Disallow: /dashboard-producteur.html
+Disallow: /panier.html
+Disallow: /reset-password.html
+
+# Sitemap
+Sitemap: https://greencart-tsds.netlify.app/sitemap.xml

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenCart – Espace producteur</title>
+    <meta name="description"
+        content="Espace personnel des producteurs sur GreenCart : gérez vos paniers, suivez les commandes et interagissez avec les consommateurs.">
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo-greencart.png?v=2">
+    <link rel="shortcut icon" href="/images/logo-greencart.png?v=2">
+    <link rel="icon" href="/favicon.ico">
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X2S0R5489Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X2S0R5489Q');
+</script>
+
+<script src="/js/config.js"></script>
+<script src="/js/cookies.js"></script>
+<script src="/js/messages.js"></script>
+<script src="/js/dashboard-archive.js"></script>
+<script src="/js/order-details.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/auth-ui.js"></script>
+<script src="/js/dashboard-sync.js"></script>
+<script src="/js/script-producteur.js"></script>
+
+<body>
+    <a class="skip-link" href="#main">Aller au contenu principal</a>
+
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/images/logo-greencart.png" alt="Logo GreenCart" />
+                <span>GreenCart</span>
+            </div>
+            <nav aria-label="Navigation principale">
+                <ul class="nav-list">
+                    <li><a href="index.html#hero">Accueil</a></li>
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="producteurs.html">Producteurs</a></li>
+                    <li>
+                        <a href="panier.html" class="nav-cart-link">
+                            Panier
+                            <span class="cart-count cart-badge" aria-label="nombre d'articles dans le panier"></span>
+                        </a>
+                    </li>
+                    <li><a href="apropos.html">À propos</a></li>
+                    <li><button id="logout-btn" class="btn-outline">Déconnexion</button></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main">
+        <section class="dashboard-page">
+            <div class="container">
+                <h1>Espace producteur</h1>
+                <p id="user-welcome" class="section-intro"></p>
+
+                <div class="dashboard-grid">
+                    <article class="about-card">
+                        <h2>Publier un produit</h2>
+                        <p>Ajoutez un panier ou un produit à votre catalogue GreenCart.</p>
+
+                        <form id="product-form" class="auth-form" aria-label="Formulaire de publication de produit">
+                            <div class="form-field">
+                                <label for="prod-name">Nom du produit / panier</label>
+                                <input type="text" id="prod-name" required
+                                    placeholder="Ex : Panier légumes de saison" />
+                            </div>
+
+                            <div class="form-field">
+                                <label for="prod-description">Description</label>
+                                <textarea id="prod-description" required
+                                    placeholder="Courte description du contenu du panier"></textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label for="prod-price">Prix (€)</label>
+                                    <input type="number" id="prod-price" min="0" step="0.01" required />
+                                </div>
+                                <div class="form-field">
+                                    <label for="prod-category">Catégorie</label>
+                                    <select id="prod-category" required>
+                                        <option value="anti-gaspi">Anti-gaspi</option>
+                                        <option value="etudiant">Étudiant</option>
+                                        <option value="famille">Famille</option>
+                                        <option value="terroir">Terroir</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label for="prod-origin">Origine (ex : Hauts-de-France)</label>
+                                    <input type="text" id="prod-origin" required />
+                                </div>
+                                <div class="form-field">
+                                    <label for="prod-region">Région / zone (ex : MEL, Flandre)</label>
+                                    <input type="text" id="prod-region" />
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-field">
+                                    <label for="prod-dlc">Date limite de consommation</label>
+                                    <input type="date" id="prod-dlc" />
+                                </div>
+                                <div class="form-field">
+                                    <label for="prod-image">Image du produit (PNG/JPG/WebP – max 2 Mo)</label>
+                                    <input type="file" id="prod-image" accept="image/png,image/jpeg,image/webp" />
+                                    <p class="form-note">Conseil : privilégiez une image légère (ex : JPG), car vous ne
+                                        pouvez pas deppasser 2 Mo.</p>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary">Publier le produit</button>
+                            <button type="button" id="cancel-edit" class="btn-cancel" style="display:none;">Annuler
+                                modification</button>
+                            <p id="product-message" class="form-note auth-message"></p>
+                        </form>
+                    </article>
+
+                    <article class="about-card producer-products-card">
+                        <h2>Mes produits publiés</h2>
+                        <p>Retrouvez vos produits récents et vos archives classées par année et par mois.</p>
+
+                        <section class="dashboard-section">
+                            <h3>Produits récents</h3>
+                            <div id="producer-products-recent" class="orders-list">
+                                <p class="form-note">Chargement de vos produits récents...</p>
+                            </div>
+                        </section>
+
+                        <section class="dashboard-section">
+                            <div class="dashboard-section-head">
+                                <h3>Produits plus anciens et archivés</h3>
+                                <p class="form-note">Produits classés par année puis par mois, avec recherche.</p>
+                            </div>
+                            <div id="producer-products-archive" class="archive-block">
+                                <p class="form-note">Aucune archive produit pour le moment.</p>
+                            </div>
+                        </section>
+                    </article>
+
+                    <article class="about-card">
+                        <h2>Conseils & prévisions</h2>
+                        <p class="section-intro">
+                            Ces prévisions sont calculées à partir de vos commandes passées.
+                        </p>
+
+                        <h3>Résumé des ventes récentes</h3>
+                        <div id="forecasts-history" class="forecast-block">
+                            <p class="form-note">Pas encore assez de commandes pour établir un historique.</p>
+                        </div>
+
+                        <h3>Prévisions pour le mois prochain</h3>
+                        <div id="forecasts-next-month" class="forecast-block">
+                            <p class="form-note">Les prévisions seront disponibles dès que vous aurez au moins une
+                                commande.</p>
+                        </div>
+                        <p id="forecasts-note" class="form-note">
+                            Les coefficients saisonniers sont basés sur des hypothèses simplifiées.
+                        </p>
+
+                    </article>
+
+                </div>
+
+                <h2>Mes commandes reçues</h2>
+                <p class="section-intro">
+                    Retrouvez vos commandes actives à traiter et vos commandes terminées archivées.
+                </p>
+
+                <section class="dashboard-section">
+                    <h3>Commandes à traiter</h3>
+                    <div id="producer-orders-active" class="orders-list">
+                        <p class="form-note">Chargement des commandes actives...</p>
+                    </div>
+                </section>
+
+                <section class="dashboard-section">
+                    <div class="dashboard-section-head">
+                        <h3>Archives commandes</h3>
+                        <p class="form-note">Les commandes terminées sont classées par année puis par mois.</p>
+                    </div>
+                    <div id="producer-orders-archive" class="archive-block">
+                        <p class="form-note">Aucune commande archivée pour le moment.</p>
+                    </div>
+                </section>
+                <h2>Segmentation de mes clients</h2>
+                <p class="section-intro">
+                    Les profils ci-dessous sont calculés à partir des commandes contenant vos produits
+                    (segmentation simplifiée).
+                </p>
+                <div id="segments-block" class="forecast-block">
+                    <p class="form-note">En attente de commandes pour calculer des segments.</p>
+                </div>
+
+                <section class="dashboard-section danger-zone">
+                    <div class="dashboard-section-head">
+                        <h3>Gestion du compte</h3>
+                        <p class="form-note">
+                            La suppression de votre compte producteur n’est possible que lorsque toutes vos commandes
+                            ont été traitées et passées au statut “Terminée”.
+                            Vos produits seront alors retirés du catalogue.
+                        </p>
+                    </div>
+
+                    <div class="account-danger-box">
+                        <button id="delete-account-btn" class="btn-danger" type="button">
+                            Supprimer mon compte
+                        </button>
+                    </div>
+                </section>
+
+        </section>
+
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <p><strong>GreenCart</strong> – Plateforme anti-gaspi & locale (projet pédagogique).</p>
+                <p>© 2026 GreenCart. Tous droits réservés.</p>
+            </div>
+            <div class="footer-links">
+                <a href="accessibilite.html">Accessibilité</a>
+                <a href="cgv.html">CGV</a>
+                <a href="cgu.html">CGU</a>
+                <a href="mentions-legales.html">Mentions légales</a>
+            </div>
+        </div>
+    </footer>
+    <div class="cookie-banner" id="cookie-banner">
+        <p>
+            Ce site GreenCart est réalisé dans le cadre d’un projet pédagogique.
+            Des cookies peuvent être utilisés pour améliorer l’expérience utilisateur.
+            <a href="mentions-legales.html#cookies">En savoir plus.</a>
+        </p>
+
+        <div class="cookie-actions">
+            <button id="cookie-accept" class="btn-cookie">Accepter</button>
+            <button id="cookie-refuse" class="btn-cookie btn-secondary">Refuser</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

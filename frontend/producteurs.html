@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Devenir producteur GreenCart | Vendre vos produits locaux et valoriser vos invendus</title>
+  <meta name="description"
+    content="Rejoignez GreenCart et valorisez vos invendus facilement. Vendez vos produits locaux, développez votre clientèle et simplifiez votre gestion en ligne." />
+  <meta name="keywords"
+    content="devenir producteur, producteurs locaux, vendre produits locaux en ligne, valoriser invendus, circuit court, anti-gaspillage" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="GreenCart" />
+
+  <meta property="og:title" content="Devenir producteur GreenCart" />
+  <meta property="og:description"
+    content="Valorisez vos invendus, développez votre clientèle locale et rejoignez une plateforme pensée pour les producteurs." />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="fr_FR" />
+
+  <link rel="canonical" href="https://www.greencart.fr/producteurs.html" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/logo-greencart.png?v=2">
+  <link rel="shortcut icon" href="/images/logo-greencart.png?v=2">
+  <link rel="icon" href="/favicon.ico">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X2S0R5489Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X2S0R5489Q');
+</script>
+
+  <script src="/js/cart.js"></script>
+  <script src="/js/auth-ui.js"></script>
+  <script src="/js/cookies.js"></script>
+
+  <style>
+    .producer-form fieldset {
+      border: 1px solid #d8ddd7;
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      background: #fff;
+    }
+
+    .producer-form legend {
+      font-weight: 700;
+      padding: 0 0.4rem;
+    }
+
+    .form-helper,
+    .section-helper,
+    .kpi-note {
+      font-size: 0.95rem;
+      color: #4e5b52;
+    }
+
+    .seo-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .seo-pillar-card,
+    .trust-card {
+      background: #fff;
+      border: 1px solid #d8ddd7;
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    .producer-proof-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .producer-proof-kpis {
+      background: #fff;
+      border: 1px solid #d8ddd7;
+      border-left: 4px solid #2f8f3d;
+      border-radius: 12px;
+      padding: 1rem 1.2rem;
+    }
+
+    .producer-proof-kpis p {
+      margin: 0 0 0.8rem 0;
+    }
+
+    .producer-proof-kpis p:last-child {
+      margin-bottom: 0;
+    }
+
+    .faq-list details {
+      background: #fff;
+      border: 1px solid #d8ddd7;
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .faq-list summary {
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .form-note {
+      font-size: 0.9rem;
+      color: #4e5b52;
+      margin-top: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+      .producer-proof-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Aller au contenu principal</a>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="container header-content">
+      <div class="logo">
+        <img src="/images/logo-greencart.png" alt="Logo GreenCart" />
+        <span>GreenCart</span>
+      </div>
+      <nav aria-label="Navigation principale">
+        <ul class="nav-list">
+          <li><a href="index.html#hero">Accueil</a></li>
+          <li><a href="catalogue.html">Catalogue</a></li>
+          <li><a href="producteurs.html" aria-current="page">Producteurs</a></li>
+          <li>
+            <a href="panier.html" class="nav-cart-link">
+              Panier
+              <span class="cart-count cart-badge" aria-label="nombre d'articles dans le panier"></span>
+            </a>
+          </li>
+          <li><a href="apropos.html">À propos</a></li>
+          <li id="nav-auth">
+            <a href="connexion.html" class="btn-outline">Connexion</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- HERO PRODUCTEURS -->
+    <section class="producers-page">
+      <div class="container">
+        <h1>Devenir producteur sur GreenCart</h1>
+        <p class="section-intro">
+          GreenCart accompagne les producteurs locaux dans toute la France pour
+          valoriser leurs invendus, vendre leurs produits en circuit court et toucher
+          de nouveaux clients dans leur zone de proximité.
+        </p>
+      </div>
+    </section>
+
+    <!-- BLOC SEO PRINCIPAL -->
+    <section class="seo-block">
+      <div class="container">
+        <h2>Valorisez vos invendus avec GreenCart</h2>
+        <p>
+          GreenCart permet aux <strong>producteurs locaux</strong> de vendre plus facilement
+          leurs paniers en ligne, de réduire le gaspillage alimentaire et de développer
+          une clientèle de proximité. La plateforme a été pensée pour les exploitations
+          qui souhaitent proposer des paniers de saison, des paniers terroir ou des
+          paniers anti-gaspi issus des surplus de récolte.
+        </p>
+        <p>
+          En rejoignant GreenCart, vous bénéficiez d’une vitrine digitale, d’un accès
+          à une clientèle urbaine engagée et d’un espace producteur simple à utiliser.
+          Vous définissez vos prix, vos quantités, vos modalités de retrait ou de livraison,
+          tout en gardant la maîtrise de votre activité.
+        </p>
+        <p>
+          GreenCart contribue également à renforcer l’économie locale et à favoriser
+          une alimentation plus responsable. Les producteurs partenaires sont valorisés
+          via des portraits, des contenus éditoriaux, des campagnes ciblées et une
+          communication dédiée à leur savoir-faire.
+        </p>
+
+        <div class="seo-pillars">
+          <article class="seo-pillar-card">
+            <h3>Vendre vos produits locaux en ligne</h3>
+            <p>
+              Gagnez en visibilité grâce à une plateforme e-commerce pensée pour les
+              producteurs et adaptée aux circuits courts.
+            </p>
+          </article>
+          <article class="seo-pillar-card">
+            <h3>Réduire les pertes liées aux invendus</h3>
+            <p>
+              Valorisez vos surplus de production au lieu de les laisser se perdre.
+            </p>
+          </article>
+          <article class="seo-pillar-card">
+            <h3>Développer votre clientèle locale</h3>
+            <p>
+              Touchez de nouveaux consommateurs sensibles aux produits de saison,
+              locaux et anti-gaspillage.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICES -->
+    <section class="producers-benefits">
+      <div class="container producer-proof-grid">
+        <div>
+          <h2>Pourquoi rejoindre GreenCart ?</h2>
+          <ul class="list-check">
+            <li>Valoriser facilement vos invendus et surplus de récolte.</li>
+            <li>Toucher de nouveaux clients sans créer vous-même un site e-commerce.</li>
+            <li>Mettre en avant la qualité de vos produits locaux et de saison.</li>
+            <li>Bénéficier d’un accompagnement à la digitalisation.</li>
+            <li>Développer un canal complémentaire de vente en circuit court.</li>
+          </ul>
+        </div>
+
+        <aside class="producer-proof-kpis" aria-label="Indicateurs clés GreenCart">
+          <p><strong>+32</strong> producteurs accompagnés</p>
+          <p><strong>92 %</strong> de satisfaction</p>
+          <p><strong>-20 %</strong> de gaspillage moyen sur les invendus</p>
+          <p class="kpi-note">
+            Données présentées à titre pédagogique pour illustrer le positionnement de la plateforme.
+          </p>
+        </aside>
+      </div>
+    </section>
+
+    <!-- FONCTIONNEMENT -->
+    <section class="producers-steps">
+      <div class="container">
+        <h2>Comment ça fonctionne ?</h2>
+        <div class="steps-grid">
+          <article class="step-card">
+            <h3>1. Vérification de votre structure</h3>
+            <p>
+              Vous démarrez par une première étape d’inscription permettant de vérifier
+              l’existence de votre exploitation grâce à vos informations légales et votre
+              numéro SIREN ou SIRET.
+            </p>
+          </article>
+
+          <article class="step-card">
+            <h3>2. Création de votre profil producteur</h3>
+            <p>
+              Vous renseignez ensuite votre type de production, les produits proposés,
+              votre zone de retrait ou de livraison et le fonctionnement de votre exploitation.
+            </p>
+          </article>
+
+          <article class="step-card">
+            <h3>3. Publication de vos offres</h3>
+            <p>
+              Vous mettez en ligne vos paniers ou produits disponibles en indiquant
+              le contenu, DLC, le prix, la région...
+            </p>
+          </article>
+
+          <article class="step-card">
+            <h3>4. Gestion des commandes</h3>
+            <p>
+              Les consommateurs commandent vos paniers via la plateforme. Vous êtes
+              notifié de chaque commande et organisez simplement le retrait ou la livraison.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXEMPLE -->
+    <section class="producers-example">
+      <div class="container producers-example-grid">
+        <div>
+          <h2>Exemple de producteur partenaire GreenCart</h2>
+          <p>
+            <strong>Ferme des Trois Chênes</strong> – Légumes de plein champ à 25 km de Lille.
+          </p>
+          <p>
+            Cette exploitation propose chaque semaine des paniers de légumes de saison,
+            ainsi que des paniers « surprise anti-gaspi » selon les surplus de récolte.
+          </p>
+          <p>Grâce à GreenCart, la ferme a pu :</p>
+          <ul class="list-check">
+            <li>vendre ses invendus sans les jeter ;</li>
+            <li>toucher une clientèle urbaine qu’elle n’atteignait pas auparavant ;</li>
+            <li>simplifier la gestion de ses paniers via un tableau de bord unique.</li>
+          </ul>
+        </div>
+
+        <div class="producer-card-highlight" aria-hidden="true">
+          <p><strong>Panier fermier – 16,90 €</strong></p>
+          <p>5 à 6 kg de légumes de saison</p>
+          <p>Disponible chaque vendredi</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="producers-faq">
+      <div class="container">
+        <h2>Questions fréquentes des producteurs</h2>
+        <div class="faq-list">
+          <details>
+            <summary>Qui peut rejoindre GreenCart ?</summary>
+            <p>
+              GreenCart s’adresse aux maraîchers, éleveurs, producteurs laitiers,
+              transformateurs artisanaux et plus largement aux structures locales
+              souhaitant vendre en circuit court.
+            </p>
+          </details>
+          <details>
+            <summary>Faut-il avoir déjà un site internet ?</summary>
+            <p>
+              Non. GreenCart a précisément pour objectif de vous offrir une vitrine
+              digitale complémentaire, sans que vous ayez à créer votre propre site.
+            </p>
+          </details>
+          <details>
+            <summary>Puis-je choisir mes prix et mes modalités de retrait ?</summary>
+            <p>
+              Oui. Chaque producteur reste maître de son offre, de ses prix, des quantités
+              proposées ainsi que du mode de retrait ou de livraison.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULAIRE -->
+    <section id="producers-contact" class="producers-contact">
+      <div class="container">
+        <h2>Rejoindre GreenCart en tant que producteur</h2>
+        <p class="section-helper">
+          Le parcours ci-dessous permet dans un premier temps de vérifier votre structure,
+          puis de recueillir les informations utiles sur votre activité. Un membre de
+          l’équipe GreenCart vous recontactera ensuite pour finaliser l’ouverture de
+          votre espace producteur.
+        </p>
+
+        <form class="producer-form" aria-label="Formulaire d'inscription producteur">
+          <!-- ETAPE 1 -->
+          <fieldset>
+            <legend>Étape 1 — Vérification de votre structure</legend>
+            <p class="form-helper">
+              Cette première étape permet de confirmer l’existence de votre exploitation
+              ou activité professionnelle.
+            </p>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="producer-name">Nom de l’exploitation</label>
+                <input type="text" id="producer-name" name="producer-name" placeholder="Ex : Ferme des Trois Chênes"
+                  required />
+              </div>
+
+              <div class="form-field">
+                <label for="producer-siren">Numéro SIREN / SIRET</label>
+                <input type="text" id="producer-siren" name="producer-siren" placeholder="Ex : 123 456 789" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="producer-city">Commune</label>
+                <input type="text" id="producer-city" name="producer-city" placeholder="Ex : Seclin" required />
+              </div>
+
+              <div class="form-field">
+                <label for="producer-email">Email professionnel</label>
+                <input type="email" id="producer-email" name="producer-email" placeholder="vous@exploitation.fr"
+                  required />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- ETAPE 2 -->
+          <fieldset>
+            <legend>Étape 2 — Votre activité</legend>
+            <p class="form-helper">
+              Ces informations permettront de qualifier votre profil et de préparer
+              votre intégration sur la plateforme.
+            </p>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="producer-type">Type de production</label>
+                <select id="producer-type" name="producer-type" required>
+                  <option value="">Sélectionnez une catégorie</option>
+                  <option value="maraichage">Maraîchage</option>
+                  <option value="elevage">Élevage</option>
+                  <option value="laitier">Produits laitiers</option>
+                  <option value="transformation">Transformation artisanale</option>
+                  <option value="mixte">Production mixte</option>
+                  <option value="autre">Autre</option>
+                </select>
+              </div>
+
+              <div class="form-field">
+                <label for="producer-products">Produits vendus</label>
+                <input type="text" id="producer-products" name="producer-products"
+                  placeholder="Ex : légumes de saison, œufs, fromages..." required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-field">
+                <label for="producer-delivery-zone">Zone de retrait / livraison</label>
+                <input type="text" id="producer-delivery-zone" name="producer-delivery-zone"
+                  placeholder="Ex : Lille et 20 km autour" required />
+              </div>
+
+              <div class="form-field">
+                <label for="producer-distribution">Mode de distribution</label>
+                <select id="producer-distribution" name="producer-distribution" required>
+                  <option value="">Sélectionnez une option</option>
+                  <option value="retrait">Retrait sur place</option>
+                  <option value="point-relais">Point relais</option>
+                  <option value="livraison-locale">Livraison locale</option>
+                  <option value="plusieurs">Plusieurs options</option>
+                </select>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- ETAPE 3 -->
+          <fieldset>
+            <legend>Étape 3 — Finalisation de la demande</legend>
+            <div class="form-field">
+              <label for="producer-message">Présentation de votre exploitation</label>
+              <textarea id="producer-message" name="producer-message" rows="5"
+                placeholder="Présentez votre activité, vos produits, vos besoins et vos attentes vis-à-vis de GreenCart..."></textarea>
+            </div>
+
+            <div class="form-field">
+              <label>
+                <input type="checkbox" name="consent" required />
+                J’accepte que mes données soient utilisées pour être recontacté par GreenCart dans le cadre de ma
+                demande.
+              </label>
+              <label>
+                <input type="checkbox" id="accept-cgu" name="accept-cgu" required />
+                J’accepte les <a href="cgu.html">CGU</a> et la <a href="mentions-legales.html">politique de
+                  confidentialité.</a>
+              </label>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="btn-primary">Créer ma demande producteur</button>
+
+          <p class="form-note">
+            Dans une version réelle, les données du formulaire seraient traitées
+            conformément à la politique de confidentialité et les informations légales
+            de la structure pourraient être vérifiées avant validation du compte.
+          </p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <p><strong>GreenCart</strong> – Plateforme anti-gaspi & locale (projet pédagogique).</p>
+        <p>© 2026 GreenCart. Tous droits réservés.</p>
+      </div>
+      <div class="footer-links">
+        <a href="accessibilite.html">Accessibilité</a>
+        <a href="cgv.html">CGV</a>
+        <a href="cgu.html">CGU</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </div>
+    </div>
+  </footer>
+  <div class="cookie-banner" id="cookie-banner">
+    <p>
+      Ce site GreenCart est réalisé dans le cadre d’un projet pédagogique.
+      Des cookies peuvent être utilisés pour améliorer l’expérience utilisateur.
+      <a href="mentions-legales.html#cookies">En savoir plus.</a>
+    </p>
+
+    <div class="cookie-actions">
+      <button id="cookie-accept" class="btn-cookie">Accepter</button>
+      <button id="cookie-refuse" class="btn-cookie btn-secondary">Refuser</button>
+    </div>
+  </div>
+</body>
+
+</html>

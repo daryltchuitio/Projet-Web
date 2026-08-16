@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenCart – CGU</title>
+    <meta name="description" content="Conditions généralesd'utilisation de GreenCart">
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo-greencart.png?v=2">
+    <link rel="shortcut icon" href="/images/logo-greencart.png?v=2">
+    <link rel="icon" href="/favicon.ico">
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X2S0R5489Q"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-X2S0R5489Q');
+</script>
+
+<script src="/js/cart.js"></script>
+<script src="/js/auth-ui.js"></script>
+<script src="/js/cookies.js"></script>
+
+<body>
+    <a class="skip-link" href="#main">Aller au contenu principal</a>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/images/logo-greencart.png" alt="Logo GreenCart" />
+                <span>GreenCart</span>
+            </div>
+            <nav aria-label="Navigation principale">
+                <ul class="nav-list">
+                    <li><a href="index.html#hero">Accueil</a></li>
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="producteurs.html">Producteurs</a></li>
+                    <li>
+                        <a href="panier.html" class="nav-cart-link">
+                            Panier
+                            <span class="cart-count cart-badge" aria-label="nombre d'articles dans le panier"></span>
+                        </a>
+                    </li>
+                    <li><a href="apropos.html">À propos</a></li>
+                    <li id="nav-auth">
+                        <a href="connexion.html" class="btn-outline">Connexion</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENU -->
+    <main id="main">
+        <section class="legal-page">
+            <div class="container">
+
+                <!-- CGU -->
+                <h1 id="cgu">Conditions Générales d’Utilisation (CGU)</h1>
+                <p>
+                    Les présentes CGU encadrent l’utilisation du site GreenCart. En naviguant sur le site,
+                    l’utilisateur accepte l’ensemble des conditions décrites ci-dessous.
+                </p>
+
+                <h3>1. Accès au service</h3>
+                <p>
+                    Le site GreenCart permet aux utilisateurs de consulter des paniers locaux ou anti-gaspillage
+                    et de découvrir des producteurs partenaires. L’accès au service est gratuit, hors coûts liés 
+                    à la connexion internet.
+                </p>
+                <p>
+                    Dans le cadre de l’utilisation du site, certaines données personnelles peuvent être collectées 
+                    via les formulaires (création de compte, contact, commande). Ces données sont nécessaires au bon 
+                    fonctionnement du service, à l’amélioration de l’expérience utilisateur et à la gestion des interactions 
+                    entre les utilisateurs et la plateforme.
+                </p>
+
+                <h3>2. Compte utilisateur</h3>
+                <p>
+                    La création d’un compte utilisateur permet d’accéder à des fonctionnalités personnalisées du site. 
+                    L’utilisateur s’engage à fournir des informations exactes et à jour lors de son inscription.
+                </p>
+
+                <p>
+                    Les données personnelles collectées dans ce cadre sont stockées de manière sécurisée et utilisées 
+                    uniquement pour la gestion du compte, le suivi des commandes et la relation client.
+                </p>
+
+                <p>
+                Conformément au Règlement Général sur la Protection des Données (RGPD), l’utilisateur dispose d’un droit d’accès, 
+                de rectification, de suppression et d’opposition concernant ses données personnelles. Ces droits peuvent être exercés 
+                à tout moment via les moyens de contact mis à disposition sur le site.
+                </p>
+
+                <h3>3. Comportement des utilisateurs</h3>
+                <p>
+                    L’utilisateur s’engage à utiliser le site dans le respect des lois et réglementations en vigueur, et à ne pas porter 
+                    atteinte au bon fonctionnement du service.
+                </p>
+                
+                <p>
+                Il est notamment interdit de fournir des informations inexactes, de détourner l’usage du site ou de tenter d’accéder de 
+                manière frauduleuse aux données ou aux systèmes.
+                </p>
+
+                <p>
+                    GreenCart met en œuvre des mesures techniques et organisationnelles appropriées afin de garantir la sécurité et la 
+                    confidentialité des données personnelles.
+                </p>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <p><strong>GreenCart</strong> – Plateforme anti-gaspi & locale (projet pédagogique).</p>
+                <p>© 2026 GreenCart. Tous droits réservés.</p>
+            </div>
+            <div class="footer-links">
+                <a href="accessibilite.html">Accessibilité</a>
+                <a href="cgv.html">CGV</a>
+                <a href="cgu.html">CGU</a>
+                <a href="mentions-legales.html">Mentions légales</a>
+            </div>
+        </div>
+    </footer>
+    <div class="cookie-banner" id="cookie-banner">
+        <p>
+            Ce site GreenCart est réalisé dans le cadre d’un projet pédagogique.
+            Des cookies peuvent être utilisés pour améliorer l’expérience utilisateur.
+            <a href="mentions-legales.html#cookies">En savoir plus.</a>
+        </p>
+
+        <div class="cookie-actions">
+            <button id="cookie-accept" class="btn-cookie">Accepter</button>
+            <button id="cookie-refuse" class="btn-cookie btn-secondary">Refuser</button>
+        </div>
+    </div>
+</body>
+
+</html>

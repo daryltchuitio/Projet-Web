@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenCart – Connexion & inscription</title>
+    <meta name="description"
+        content="Connexion et création de compte GreenCart pour consommateurs et producteurs locaux.">
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logo-greencart.png?v=2">
+    <link rel="shortcut icon" href="/images/logo-greencart.png?v=2">
+    <link rel="icon" href="/favicon.ico">
+</head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-X2S0R5489Q"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-X2S0R5489Q');
+</script>
+
+<script src="/js/config.js"></script>
+<script src="/js/cookies.js"></script>
+<script src="/js/messages.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/auth-ui.js"></script>
+<script src="/js/script-connexion.js"></script>
+
+<body>
+    <a class="skip-link" href="#main">Aller au contenu principal</a>
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="container header-content">
+            <div class="logo">
+                <img src="/images/logo-greencart.png" alt="Logo GreenCart" />
+                <span>GreenCart</span>
+            </div>
+            <nav aria-label="Navigation principale">
+                <ul class="nav-list">
+                    <li><a href="index.html#hero">Accueil</a></li>
+                    <li><a href="catalogue.html">Catalogue</a></li>
+                    <li><a href="producteurs.html">Producteurs</a></li>
+                    <li>
+                        <a href="panier.html" class="nav-cart-link">
+                            Panier
+                            <span class="cart-count cart-badge" aria-label="nombre d'articles dans le panier"></span>
+                        </a>
+                    </li>
+                    <li><a href="apropos.html">À propos</a></li>
+                    <li id="nav-auth">
+                        <a href="connexion.html" class="btn-outline">Connexion</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- fil d’Ariane -->
+    <nav class="breadcrumb" aria-label="Fil d’Ariane">
+        <a href="index.html">Accueil</a>
+        <span aria-hidden="true"> &gt; </span>
+        <span>Connexion</span>
+    </nav>
+
+    <!-- CONTENU PRINCIPAL -->
+    <main id="main">
+        <section class="auth-page">
+            <div class="container auth-grid">
+                <!-- Bloc Connexion -->
+                <section class="auth-card" aria-labelledby="login-title">
+                    <h1 id="login-title">Connexion</h1>
+                    <p class="section-intro">
+                        Accédez à votre espace consommateur ou producteur GreenCart.
+                    </p>
+
+                    <form class="auth-form" id="login-form" aria-label="Formulaire de connexion">
+                        <div class="form-field">
+                            <label for="login-email">Adresse e-mail</label>
+                            <input type="email" id="login-email" name="login-email" placeholder="vous@example.com"
+                                required />
+                        </div>
+                        <div class="form-field">
+                            <label for="login-password">Mot de passe</label>
+                            <input type="password" id="login-password" name="login-password"
+                                placeholder="Votre mot de passe" required />
+                        </div>
+
+                        <p class="form-note auth-forgot-password">
+                            <a href="#" id="forgot-password-link">Mot de passe oublié ?</a>
+                        </p>
+
+                        <button type="submit" class="btn-primary">Se connecter</button>
+                        <p id="login-message" class="form-note auth-message"></p>
+                    </form>
+                </section>
+
+                <!-- Bloc Inscription -->
+                <section class="auth-card" aria-labelledby="register-title">
+                    <h2 id="register-title">Créer un compte</h2>
+                    <p class="section-intro">
+                        Créez un compte pour commander des paniers en tant que consommateur
+                        ou vendre vos produits en tant que producteur local.
+                    </p>
+                    <p class="section-intro"><em>Si vous êtes producteur,
+                            vous pouvez vous inscrire via le formulaire de la page <a
+                                href="producteurs.html#producers-contact">Producteurs</a>,
+                            ou commencer votre inscription ici et nous vous contacterons pour finaliser votre profil
+                            producteur. Après validation, vous pourriez accéder à votre espace.</em>
+                        <strong>(Dans la version finale, les producteurs n'auront accès à leur espace que après
+                            validation de leur profil par l’équipe GreenCart, pour
+                            garantir la qualité et la fiabilité des producteurs référencés sur la plateforme, pour
+                            l'instant la création de compte producteur
+                            se fait ici et directement)</strong>
+                    </p>
+
+                    <form class="auth-form" id="register-form" aria-label="Formulaire d'inscription">
+                        <div class="form-field">
+                            <label for="register-name">Nom complet / Nom de l’exploitation</label>
+                            <input type="text" id="register-name" name="register-name"
+                                placeholder="Ex : Jeanne Martin / Ferme des Trois Chênes" required />
+                        </div>
+                        <div class="form-field">
+                            <label for="register-email">Adresse e-mail</label>
+                            <input type="email" id="register-email" name="register-email" placeholder="vous@example.com"
+                                required />
+                        </div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="register-password">Mot de passe</label>
+                                <input type="password" id="register-password" name="register-password" required />
+                            </div>
+                            <div class="form-field">
+                                <label for="register-password-confirm">Confirmation</label>
+                                <input type="password" id="register-password-confirm" name="register-password-confirm"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="form-field">
+                            <label for="register-role">Je suis :</label>
+                            <select id="register-role" name="register-role" required>
+                                <option value="consommateur">Consommateur</option>
+                                <option value="producteur">Producteur local</option>
+                            </select>
+                        </div>
+                        <div class="form-field form-checkbox">
+                            <label>
+                                <input type="checkbox" id="accept-cgu" name="accept-cgu" required />
+                                J’accepte les <a href="cgu.html">CGU</a> et la <a href="mentions-legales.html">politique
+                                    de confidentialité.</a>
+                            </label>
+                        </div>
+                        <button type="submit" class="btn-secondary">Créer mon compte</button>
+                        <p id="register-message" class="form-note auth-message"></p>
+                    </form>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <div class="container footer-grid">
+            <div>
+                <p><strong>GreenCart</strong> – Plateforme anti-gaspi & locale (projet pédagogique).</p>
+                <p>© 2026 GreenCart. Tous droits réservés.</p>
+            </div>
+            <div class="footer-links">
+                <a href="accessibilite.html">Accessibilité</a>
+                <a href="cgv.html">CGV</a>
+                <a href="cgu.html">CGU</a>
+                <a href="mentions-legales.html">Mentions légales</a>
+            </div>
+        </div>
+    </footer>
+    <div class="cookie-banner" id="cookie-banner">
+        <p>
+            Ce site GreenCart est réalisé dans le cadre d’un projet pédagogique.
+            Des cookies peuvent être utilisés pour améliorer l’expérience utilisateur.
+            <a href="mentions-legales.html#cookies">En savoir plus.</a>
+        </p>
+
+        <div class="cookie-actions">
+            <button id="cookie-accept" class="btn-cookie">Accepter</button>
+            <button id="cookie-refuse" class="btn-cookie btn-secondary">Refuser</button>
+        </div>
+    </div>
+
+</body>
+
+</html>
