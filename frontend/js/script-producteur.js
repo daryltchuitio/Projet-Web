@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   const user = JSON.parse(userStr);
 
-  if (user.role !== "producteur") {
+  if (user.role !== "producer") {
     window.location.href = "connexion.html";
     return;
   }

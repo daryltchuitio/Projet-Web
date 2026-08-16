@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
         const user = JSON.parse(userStr);
 
-        if (user.role === "producteur") {
+        if (user.role === "producer") {
             window.location.href = "dashboard-producteur.html";
             return;
         }
 
-        if (user.role === "consommateur") {
+        if (user.role === "consumer") {
             window.location.href = "dashboard-consommateur.html";
             return;
         }
@@ -219,20 +219,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 setToken(data.token);
 
-                const roleFR = data.user.role === "producer" ? "producteur" : "consommateur";
                 setCurrentUser({
                     id: data.user.id,
                     name: data.user.name,
                     email: data.user.email,
-                    role: roleFR
+                    role: data.user.role
                 });
 
                 loginMessage.textContent = "Connexion réussie. Redirection...";
                 loginMessage.classList.add("auth-success");
 
                 setTimeout(() => {
-                    if (roleFR === "producteur") window.location.href = "dashboard-producteur.html";
-                    else window.location.href = "dashboard-consommateur.html";
+                    redirectByRole(data.user.role);
                 }, 800);
 
             } catch (err) {

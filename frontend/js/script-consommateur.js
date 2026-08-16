@@ -293,7 +293,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const user = JSON.parse(userStr);
 
-  if (user.role !== "consommateur") {
+  if (user.role !== "consumer") {
     window.location.href = "connexion.html";
     return;
   }

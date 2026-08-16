@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!user) {
       navAuth.innerHTML = '<a href="connexion.html" class="btn-outline">Connexion</a>';
     } else {
-      const target = user.role === "producteur"
+      const target = user.role === "producer"
         ? "dashboard-producteur.html"
         : "dashboard-consommateur.html";
 
