@@ -11,6 +11,7 @@ const productsRoutes = require("./routes/products");
 const ordersRoutes = require("./routes/orders");
 const reviewsRoutes = require("./routes/reviews");
 const insightsRoutes = require("./routes/insights");
+const eventsRoutes = require("./routes/events");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -63,6 +64,7 @@ app.use("/api", productsRoutes);
 app.use("/api", ordersRoutes);
 app.use("/api", reviewsRoutes);
 app.use("/api", insightsRoutes);
+app.use("/api", eventsRoutes);
 
 console.log("🔎 MONGODB_URI détectée ?", Boolean(MONGODB_URI));
 

@@ -521,7 +521,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         renderConsumerOrders(userOrders);
       },
-      { interval: 5000 }
+      { events: ["orders"] }
     );
   }
 

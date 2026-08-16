@@ -1,7 +1,6 @@
 (function () {
   if (window.ProductsSync) return;
 
-  const SYNC_INTERVAL_MS = 5000;
   const CART_KEY = "greencart_cart";
 
   function getApiBase() {
@@ -111,7 +110,16 @@
 
   function start() {
     syncOnce();
-    setInterval(syncOnce, SYNC_INTERVAL_MS);
+
+    const source = new EventSource(`${getApiBase()}/api/events/products`, { withCredentials: true });
+    source.addEventListener("changed", syncOnce);
+    source.onerror = () => console.warn("[ProductsSync] flux SSE interrompu, reconnexion automatique...");
+
+    return {
+      stop() {
+        source.close();
+      }
+    };
   }
 
   window.ProductsSync = {

@@ -1,5 +1,6 @@
 const Product = require("../models/Product");
 const Review = require("../models/Review");
+const eventBus = require("../utils/eventBus");
 
 // Champs qu'un producteur est autorisé à définir/modifier sur un produit
 const ALLOWED_PRODUCT_FIELDS = ["name", "description", "price", "category", "origin", "region", "dlc", "image"];
@@ -22,6 +23,7 @@ async function create(req, res) {
       producer: req.user.userId
     });
 
+    eventBus.emit("products:changed");
     res.status(201).json(product);
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur", error: err.message });
@@ -62,6 +64,7 @@ async function archive(req, res) {
     product.isActive = false;
     await product.save();
 
+    eventBus.emit("products:changed");
     res.json({ message: "Produit archivé", product });
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur", error: err.message });
@@ -84,6 +87,8 @@ async function remove(req, res) {
     }
 
     await product.deleteOne();
+
+    eventBus.emit("products:changed");
     res.json({ message: "Produit supprimé" });
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur", error: err.message });
@@ -108,6 +113,7 @@ async function update(req, res) {
     Object.assign(product, pickAllowedFields(req.body, ALLOWED_PRODUCT_FIELDS));
     await product.save();
 
+    eventBus.emit("products:changed");
     res.json(product);
   } catch (err) {
     res.status(500).json({ message: "Erreur serveur", error: err.message });

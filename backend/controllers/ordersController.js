@@ -2,6 +2,7 @@ const Order = require("../models/Order");
 const Product = require("../models/Product");
 const Review = require("../models/Review");
 const { computeOrderStatus, filterOrderItemsForProducer } = require("../utils/orderStatus");
+const eventBus = require("../utils/eventBus");
 
 // Créer une commande (Consumer uniquement)
 async function create(req, res) {
@@ -85,6 +86,7 @@ async function create(req, res) {
       status: "commande_en_cours"
     });
 
+    eventBus.emit("orders:changed");
     return res.status(201).json(order);
   } catch (err) {
     return res.status(500).json({
@@ -209,6 +211,7 @@ async function updateItemStatus(req, res) {
 
     await order.save();
 
+    eventBus.emit("orders:changed");
     return res.json({
       message: "Statut du produit mis à jour.",
       order,

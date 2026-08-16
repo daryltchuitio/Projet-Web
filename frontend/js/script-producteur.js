@@ -840,7 +840,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         await renderForecasts();
         await renderSegments();
       },
-      { interval: 5000 }
+      { events: ["products", "orders"] }
     );
   }
 
