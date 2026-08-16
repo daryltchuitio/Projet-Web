@@ -12,6 +12,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  // Le token vit dans un cookie httpOnly : seul le serveur peut l'effacer.
+  async function logout() {
+    try {
+      await fetch(`${window.APP_CONFIG.API_BASE}/api/logout`, {
+        method: "POST",
+        credentials: "same-origin"
+      });
+    } catch {
+      // pas grave si la requête échoue, le cookie expirera de toute façon
+    }
+    localStorage.removeItem(CURRENT_USER_KEY);
+  }
+
+  window.GreenCartAuth = { logout, getCurrentUser };
+
   if (navAuth) {
     const user = getCurrentUser();
 
@@ -83,8 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const user = getCurrentUser();
     if (!user) return;
 
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem("greencart_token");
+    await logout();
 
     if (window.AppMessages) {
       await AppMessages.alert(
@@ -103,12 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     window.location.href = "connexion.html";
   }
 
-  function forceLogoutWithoutAlert() {
+  async function forceLogoutWithoutAlert() {
     const user = getCurrentUser();
     if (!user) return;
 
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem("greencart_token");
+    await logout();
     window.location.href = "connexion.html";
   }
 
@@ -169,7 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     if (result?.cancelled) {
-      forceLogoutWithoutAlert();
+      await forceLogoutWithoutAlert();
       return;
     }
   }

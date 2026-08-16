@@ -6,6 +6,7 @@ const authController = require("../controllers/authController");
 
 router.post("/register", authLimiter, authController.register);
 router.post("/login", authLimiter, authController.login);
+router.post("/logout", authController.logout);
 router.get("/me", auth, authController.getMe);
 router.delete("/me", auth, authController.deleteMe);
 router.post("/password/forgot", forgotPasswordLimiter, authController.forgotPassword);

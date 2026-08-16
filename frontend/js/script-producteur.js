@@ -1,16 +1,10 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   const API_BASE = window.APP_CONFIG.API_BASE;
-  const TOKEN_KEY = "greencart_token";
-
-  function getToken() {
-    return localStorage.getItem(TOKEN_KEY);
-  }
 
   async function apiGetProducerOrders() {
-    const token = getToken();
     const res = await fetch(`${API_BASE}/api/producer/orders`, {
-      headers: { Authorization: `Bearer ${token}` }
+      credentials: "same-origin"
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || "Erreur chargement commandes producteur");
@@ -19,12 +13,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   async function apiDeleteMyAccount() {
-    const token = getToken();
     const res = await fetch(`${API_BASE}/api/me`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      credentials: "same-origin"
     });
 
     const data = await res.json().catch(() => ({}));
@@ -35,17 +26,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   const CURRENT_USER_KEY = "greencart_current_user";
 
   const userStr = localStorage.getItem(CURRENT_USER_KEY);
-  const token = localStorage.getItem("greencart_token");
 
-  if (!userStr || !token) {
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem("greencart_token");
+  if (!userStr) {
     window.location.href = "connexion.html";
     return;
   }
   const user = JSON.parse(userStr);
 
   if (user.role !== "producer") {
+    window.location.href = "connexion.html";
+    return;
+  }
+
+  // Le token vit dans un cookie httpOnly : on vérifie la session côté serveur.
+  const meCheck = await fetch(`${API_BASE}/api/me`, { credentials: "same-origin" });
+  if (!meCheck.ok) {
+    localStorage.removeItem(CURRENT_USER_KEY);
     window.location.href = "connexion.html";
     return;
   }
@@ -68,8 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!confirmed) return;
 
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem("greencart_token");
+    await window.GreenCartAuth.logout();
 
     window.location.href = "connexion.html";
   });
@@ -117,8 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       );
 
-      localStorage.removeItem(CURRENT_USER_KEY);
-      localStorage.removeItem("greencart_token");
+      await window.GreenCartAuth.logout();
 
       window.location.href = "connexion.html";
     } catch (err) {
@@ -134,12 +128,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   async function apiPatchOrderItemStatus(orderId, itemId, status) {
-    const token = getToken();
     const res = await fetch(`${API_BASE}/api/orders/${orderId}/items/${itemId}/status`, {
       method: "PATCH",
+      credentials: "same-origin",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ status })
     });
@@ -156,9 +149,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     container.innerHTML = '<p class="form-note">Chargement...</p>';
 
     try {
-      const token = getToken();
       const res = await fetch(`${API_BASE}/api/producer/insights/segments`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: "same-origin"
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Erreur segments");
@@ -209,9 +201,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     nextMonthContainer.innerHTML = '<p class="form-note">Chargement...</p>';
 
     try {
-      const token = getToken();
       const res = await fetch(`${API_BASE}/api/producer/insights/forecasts`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: "same-origin"
       });
       const data = await res.json();
 
@@ -455,9 +446,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     archiveContainer.innerHTML = '<p class="form-note">Chargement des archives produits...</p>';
 
     try {
-      const token = getToken();
       const res = await fetch(`${API_BASE}/api/products/mine`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: "same-origin"
       });
 
       const products = await res.json().catch(() => ([]));
@@ -642,18 +632,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       try {
 
-        const token = getToken();
-        if (!token) {
-          window.location.href = "connexion.html";
-          return;
-        }
-
         if (editingId) {
           const res = await fetch(`${API_BASE}/api/products/${editingId}`, {
             method: "PATCH",
+            credentials: "same-origin",
             headers: {
-              "Content-Type": "application/json",
-              "Authorization": `Bearer ${token}`
+              "Content-Type": "application/json"
             },
             body: JSON.stringify(payload)
           });
@@ -692,9 +676,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const res = await fetch(`${API_BASE}/api/products`, {
           method: "POST",
+          credentials: "same-origin",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Content-Type": "application/json"
           },
           body: JSON.stringify(payload)
 
@@ -750,10 +734,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!ok) return;
 
     try {
-      const token = getToken();
       const res = await fetch(`${API_BASE}/api/products/${id}/archive`, {
         method: "PATCH",
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: "same-origin"
       });
 
       const data = await res.json().catch(() => ({}));
@@ -784,9 +767,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const id = btn.dataset.id;
 
     try {
-      const token = getToken();
       const res = await fetch(`${API_BASE}/api/products/mine`, {
-        headers: { Authorization: `Bearer ${token}` }
+        credentials: "same-origin"
       });
 
       const products = await res.json().catch(() => []);
@@ -845,7 +827,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       async () => {
         const [products, orders] = await Promise.all([
           fetch(`${API_BASE}/api/products/mine`, {
-            headers: { Authorization: `Bearer ${getToken()}` }
+            credentials: "same-origin"
           }).then(res => res.json()),
           apiGetProducerOrders()
         ]);

@@ -1,13 +1,11 @@
 const jwt = require("jsonwebtoken");
 
 function auth(req, res, next) {
-  const header = req.headers.authorization; // "Bearer <token>"
+  const token = req.cookies?.greencart_token;
 
-  if (!header || !header.startsWith("Bearer ")) {
+  if (!token) {
     return res.status(401).json({ message: "Token manquant" });
   }
-
-  const token = header.split(" ")[1];
 
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);

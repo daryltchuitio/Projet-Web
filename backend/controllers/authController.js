@@ -72,9 +72,15 @@ async function login(req, res) {
       { expiresIn: "1h" }
     );
 
+    res.cookie("greencart_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60 * 1000 // 1h, aligné sur l'expiration du JWT
+    });
+
     res.json({
       message: "Login réussi",
-      token,
       user: {
         id: user._id,
         name: user.name,
@@ -86,6 +92,16 @@ async function login(req, res) {
   } catch (error) {
     res.status(500).json({ message: "Erreur serveur" });
   }
+}
+
+// LOGOUT : efface le cookie côté serveur
+function logout(req, res) {
+  res.clearCookie("greencart_token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict"
+  });
+  res.json({ message: "Déconnexion réussie" });
 }
 
 // Route protégée : infos utilisateur connecté
@@ -257,4 +273,4 @@ async function deleteMe(req, res) {
   }
 }
 
-module.exports = { register, login, getMe, forgotPassword, resetPassword, deleteMe };
+module.exports = { register, login, logout, getMe, forgotPassword, resetPassword, deleteMe };

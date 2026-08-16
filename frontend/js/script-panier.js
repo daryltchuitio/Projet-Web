@@ -45,10 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem(CART_KEY_LOCAL, JSON.stringify(cart));
   }
 
-  function getToken() {
-    return localStorage.getItem("greencart_token");
-  }
-
   async function checkCartAvailability(cart) {
     const res = await fetch(`${API_BASE}/api/products`);
     const products = await res.json().catch(() => []);
@@ -175,8 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const token = getToken();
-      if (!token) {
+      // Le token vit dans un cookie httpOnly : on vérifie la session côté serveur.
+      const meCheck = await fetch(`${API_BASE}/api/me`, { credentials: "same-origin" });
+      if (!meCheck.ok) {
         const result = await AppMessages.alert("Vous devez être connecté pour valider une commande.", {
           title: "Vous n'êtes pas connecté",
           confirmText: "Se connecter"
@@ -228,9 +225,9 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const res = await fetch(`${API_BASE}/api/orders`, {
           method: "POST",
+          credentials: "same-origin",
           headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
+            "Content-Type": "application/json"
           },
           body: JSON.stringify({ items })
         });

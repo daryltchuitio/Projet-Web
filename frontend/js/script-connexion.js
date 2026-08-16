@@ -1,41 +1,30 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     const CURRENT_USER_KEY = "greencart_current_user";
-    const TOKEN_KEY = "greencart_token";
-
-    function isTokenExpired(token) {
-        try {
-            const payload = JSON.parse(atob(token.split(".")[1]));
-            if (!payload.exp) return true;
-            return Date.now() >= payload.exp * 1000;
-        } catch {
-            return true;
-        }
-    }
+    const API_BASE = window.APP_CONFIG.API_BASE;
 
     const userStr = localStorage.getItem(CURRENT_USER_KEY);
-    const token = localStorage.getItem(TOKEN_KEY);
+    if (!userStr) return;
 
-    if (!userStr || !token || isTokenExpired(token)) {
+    let user;
+    try {
+        user = JSON.parse(userStr);
+    } catch {
         localStorage.removeItem(CURRENT_USER_KEY);
-        localStorage.removeItem(TOKEN_KEY);
         return;
     }
 
-    try {
-        const user = JSON.parse(userStr);
-
-        if (user.role === "producer") {
-            window.location.href = "dashboard-producteur.html";
-            return;
-        }
-
-        if (user.role === "consumer") {
-            window.location.href = "dashboard-consommateur.html";
-            return;
-        }
-    } catch {
+    // Le token vit dans un cookie httpOnly, illisible en JS : on demande
+    // au serveur si la session est toujours valide avant de rediriger.
+    const res = await fetch(`${API_BASE}/api/me`, { credentials: "same-origin" });
+    if (!res.ok) {
         localStorage.removeItem(CURRENT_USER_KEY);
-        localStorage.removeItem(TOKEN_KEY);
+        return;
+    }
+
+    if (user.role === "producer") {
+        window.location.href = "dashboard-producteur.html";
+    } else if (user.role === "consumer") {
+        window.location.href = "dashboard-consommateur.html";
     }
 });
 
@@ -43,14 +32,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const API_BASE = window.APP_CONFIG.API_BASE;
     const CURRENT_USER_KEY = "greencart_current_user";
-    const TOKEN_KEY = "greencart_token";
 
     function setCurrentUser(user) {
         localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
-    }
-
-    function setToken(token) {
-        localStorage.setItem(TOKEN_KEY, token);
     }
 
     async function requestPasswordReset(email) {
@@ -203,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const res = await fetch(`${API_BASE}/api/login`, {
                     method: "POST",
+                    credentials: "same-origin",
                     headers: {
                         "Content-Type": "application/json"
                     },
@@ -216,8 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     loginMessage.classList.add("auth-error");
                     return;
                 }
-
-                setToken(data.token);
 
                 setCurrentUser({
                     id: data.user.id,

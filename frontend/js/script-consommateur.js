@@ -1,24 +1,23 @@
 document.addEventListener("DOMContentLoaded", async () => {
 
   const CURRENT_USER_KEY = "greencart_current_user";
-  const ORDERS_KEY = "greencart_orders";
   const REVIEWS_KEY = "greencart_reviews";
 
   const API_BASE = window.APP_CONFIG.API_BASE;
-  const TOKEN_KEY = "greencart_token";
 
   const userStr = localStorage.getItem(CURRENT_USER_KEY);
-  const token = localStorage.getItem("greencart_token");
 
-  if (!userStr || !token) {
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem("greencart_token");
+  if (!userStr) {
     window.location.href = "connexion.html";
     return;
   }
 
-  function getToken() {
-    return localStorage.getItem(TOKEN_KEY);
+  // Le token vit dans un cookie httpOnly : on vérifie la session côté serveur.
+  const meCheck = await fetch(`${API_BASE}/api/me`, { credentials: "same-origin" });
+  if (!meCheck.ok) {
+    localStorage.removeItem(CURRENT_USER_KEY);
+    window.location.href = "connexion.html";
+    return;
   }
 
   async function apiGetProductReviews(productId) {
@@ -28,10 +27,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function apiDeleteMyReview(reviewId) {
-    const token = getToken();
     const res = await fetch(`${API_BASE}/api/reviews/${reviewId}`, {
       method: "DELETE",
-      headers: { "Authorization": `Bearer ${token}` }
+      credentials: "same-origin"
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || "Erreur suppression avis");
@@ -39,13 +37,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   async function apiCreateReview(productId, orderId, rating, comment) {
-    const token = getToken();
-
     const res = await fetch(`${API_BASE}/api/products/${productId}/reviews`, {
       method: "POST",
+      credentials: "same-origin",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({ orderId, rating, comment })
     });
@@ -299,8 +295,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!confirmed) return;
 
-    localStorage.removeItem(CURRENT_USER_KEY);
-    localStorage.removeItem("greencart_token");
+    await window.GreenCartAuth.logout();
 
     window.location.href = "connexion.html";
   });
@@ -332,8 +327,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       );
 
-      localStorage.removeItem(CURRENT_USER_KEY);
-      localStorage.removeItem("greencart_token");
+      await window.GreenCartAuth.logout();
 
       window.location.href = "connexion.html";
     } catch (err) {
@@ -351,9 +345,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   async function reloadMyOrders() {
-    const token = getToken();
     const res = await fetch(`${API_BASE}/api/orders/me`, {
-      headers: { Authorization: `Bearer ${token}` }
+      credentials: "same-origin"
     });
 
     const data = await res.json().catch(() => ([]));
@@ -366,12 +359,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   async function apiDeleteMyAccount() {
-    const token = getToken();
     const res = await fetch(`${API_BASE}/api/me`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      credentials: "same-origin"
     });
 
     const data = await res.json().catch(() => ({}));
@@ -394,14 +384,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let userOrders = [];
   try {
-    const token = getToken();
-    if (!token) {
-      window.location.href = "connexion.html";
-      return;
-    }
-
     const res = await fetch(`${API_BASE}/api/orders/me`, {
-      headers: { Authorization: `Bearer ${token}` }
+      credentials: "same-origin"
     });
 
     if (!res.ok) {
