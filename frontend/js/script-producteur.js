@@ -33,9 +33,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   const CURRENT_USER_KEY = "greencart_current_user";
-  const PRODUCTS_KEY = "greencart_products";
-  const ORDERS_KEY = "greencart_orders";
-  const USERS_KEY = "greencart_orders";
 
   const userStr = localStorage.getItem(CURRENT_USER_KEY);
   const token = localStorage.getItem("greencart_token");
@@ -136,22 +133,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  function loadProducts() {
-    return JSON.parse(localStorage.getItem(PRODUCTS_KEY) || "[]");
-  }
-
-  function saveProducts(products) {
-    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
-  }
-
-  function loadOrders() {
-    return JSON.parse(localStorage.getItem(ORDERS_KEY) || "[]");
-  }
-
-  function loadUsers() {
-    return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-  }
-
   async function apiPatchOrderItemStatus(orderId, itemId, status) {
     const token = getToken();
     const res = await fetch(`${API_BASE}/api/orders/${orderId}/items/${itemId}/status`, {
@@ -166,25 +147,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(data.message || "Erreur mise à jour statut produit");
     return data;
-  }
-
-  function getSeasonFactor(month, category) {
-    if (month >= 6 && month <= 8) {
-      if (category === "famille" || category === "terroir") return 1.2;
-      return 1.1;
-    }
-    if (month === 12 || month === 1) {
-      if (category === "terroir") return 1.3;
-      return 1.1;
-    }
-    if (month >= 3 && month <= 5) {
-      if (category === "anti-gaspi") return 1.2;
-      return 1.1;
-    }
-    if (month >= 9 && month <= 11) {
-      return 1.05;
-    }
-    return 1.0;
   }
 
   async function renderSegments() {
@@ -222,12 +184,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         <tbody>
           ${segments.map(s => `
             <tr>
-              <td>${s.segment}</td>
+              <td>${DashboardArchive.escapeHtml(s.segment)}</td>
               <td>${s.usersCount}</td>
               <td>${Number(s.avgBasket).toFixed(1)} €</td>
-              <td>${s.dominantCategory}</td>
-              <td>${(s.examples || []).join(", ")}</td>
-              <td>${s.advice}</td>
+              <td>${DashboardArchive.escapeHtml(s.dominantCategory)}</td>
+              <td>${(s.examples || []).map(ex => DashboardArchive.escapeHtml(ex)).join(", ")}</td>
+              <td>${DashboardArchive.escapeHtml(s.advice)}</td>
             </tr>
           `).join("")}
         </tbody>
@@ -268,9 +230,9 @@ document.addEventListener("DOMContentLoaded", async () => {
           <tbody>
             ${historyRows.map(r => `
               <tr>
-                <td>${r.name}</td>
-                <td>${r.category || "—"}</td>
-                <td>${r.period}</td>
+                <td>${DashboardArchive.escapeHtml(r.name)}</td>
+                <td>${DashboardArchive.escapeHtml(r.category || "—")}</td>
+                <td>${DashboardArchive.escapeHtml(r.period)}</td>
                 <td>${r.total}</td>
                 <td>${Number(r.avg).toFixed(1)}</td>
               </tr>
@@ -292,12 +254,12 @@ document.addEventListener("DOMContentLoaded", async () => {
           <tbody>
             ${forecastRows.map(r => `
               <tr>
-                <td>${r.name}</td>
-                <td>${r.category || "—"}</td>
+                <td>${DashboardArchive.escapeHtml(r.name)}</td>
+                <td>${DashboardArchive.escapeHtml(r.category || "—")}</td>
                 <td>${Number(r.avg).toFixed(1)}</td>
                 <td>${Number(r.factor).toFixed(2)}</td>
                 <td>${Number(r.forecast).toFixed(1)}</td>
-                <td>${r.advice}</td>
+                <td>${DashboardArchive.escapeHtml(r.advice)}</td>
               </tr>
             `).join("")}
           </tbody>
@@ -341,7 +303,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     card.innerHTML = `
     <div class="product-card-top">
-      <img src="${img}" alt="${DashboardArchive.escapeHtml(p.name || "Produit")}" class="product-thumb">
+      <img src="${DashboardArchive.escapeHtml(img)}" alt="${DashboardArchive.escapeHtml(p.name || "Produit")}" class="product-thumb">
       <div class="product-meta">
         <h4>${DashboardArchive.escapeHtml(p.name || "Produit")}</h4>
         <p class="form-note">${DashboardArchive.escapeHtml(p.category || "Catégorie")}</p>
