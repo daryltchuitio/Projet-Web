@@ -12,6 +12,7 @@ const ordersRoutes = require("./routes/orders");
 const reviewsRoutes = require("./routes/reviews");
 const insightsRoutes = require("./routes/insights");
 const eventsRoutes = require("./routes/events");
+const uploadRoutes = require("./routes/upload");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,7 +23,7 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com"],
     }
   }
 }));
@@ -65,6 +66,7 @@ app.use("/api", ordersRoutes);
 app.use("/api", reviewsRoutes);
 app.use("/api", insightsRoutes);
 app.use("/api", eventsRoutes);
+app.use("/api", uploadRoutes);
 
 console.log("🔎 MONGODB_URI détectée ?", Boolean(MONGODB_URI));
 

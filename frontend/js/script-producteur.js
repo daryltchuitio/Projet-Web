@@ -588,7 +588,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         return;
       }
 
-      let imageDataUrl = "";
       if (file) {
         const MAX_BYTES = 1024 * 1024 * 2;
         if (file.size > MAX_BYTES) {
@@ -603,15 +602,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           messageEl.classList.add("auth-error");
           return;
         }
-
-        imageDataUrl = await new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = () => reject(new Error("Erreur de lecture du fichier image"));
-          reader.readAsDataURL(file);
-        });
-      } else {
-        imageDataUrl = "/images/image-par-defaut.png";
       }
 
       const editingId = form.dataset.editingId;
@@ -626,11 +616,34 @@ document.addEventListener("DOMContentLoaded", async () => {
         dlc
       };
 
-      if (file) {
-        payload.image = imageDataUrl;
-      }
+      const submitBtn = document.querySelector("#product-form button[type='submit']");
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.disabled = true;
 
       try {
+        if (file) {
+          submitBtn.textContent = "Envoi de l'image...";
+
+          const uploadForm = new FormData();
+          uploadForm.append("image", file);
+
+          const uploadRes = await fetch(`${API_BASE}/api/upload`, {
+            method: "POST",
+            credentials: "same-origin",
+            body: uploadForm
+          });
+
+          const uploadData = await uploadRes.json().catch(() => ({}));
+          if (!uploadRes.ok) {
+            messageEl.textContent = uploadData.message || "Erreur lors de l'envoi de l'image.";
+            messageEl.classList.add("auth-error");
+            submitBtn.textContent = originalBtnText;
+            return;
+          }
+
+          payload.image = uploadData.url;
+          submitBtn.textContent = originalBtnText;
+        }
 
         if (editingId) {
           const res = await fetch(`${API_BASE}/api/products/${editingId}`, {
@@ -712,6 +725,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error(err);
         messageEl.textContent = "Erreur réseau / serveur.";
         messageEl.classList.add("auth-error");
+        submitBtn.textContent = originalBtnText;
+      } finally {
+        submitBtn.disabled = false;
       }
     });
   }
