@@ -3,10 +3,6 @@
 
   const DEFAULT_INTERVAL_MS = 5000;
 
-  function stableStringify(value) {
-    return JSON.stringify(value, Object.keys(value || {}).sort());
-  }
-
   function createSignature(data) {
     try {
       return JSON.stringify(data);

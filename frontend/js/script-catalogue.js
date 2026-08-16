@@ -161,13 +161,17 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadApiProducts() {
     if (!listEl) return;
 
+    listEl.innerHTML = `<p class="form-note">Chargement des produits...</p>`;
+
     try {
       const products = await apiGetProducts();
       if (!Array.isArray(products)) return;
 
+      listEl.innerHTML = "";
       products.forEach(p => listEl.appendChild(buildProductCard(p)));
     } catch (err) {
       console.error("Erreur loadApiProducts:", err);
+      listEl.innerHTML = `<p class="form-note">Impossible de charger les produits pour le moment.</p>`;
     }
   }
 
